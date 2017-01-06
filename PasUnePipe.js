@@ -20,7 +20,7 @@ PasUnePipe.prototype.start = function() {
     for (let el of elements) {
         this.observeView(el);
     }
-    this.bodyObserver = this.nodeObserver.observe(document.body, { attributes: false, childList: true, characterData: false });
+    this.bodyObserver = this.nodeObserver.observe(document.body, { subtree: true, attributes: false, childList: true, characterData: false });
     return this;
 }
 
@@ -44,3 +44,5 @@ PasUnePipe.prototype.execFunctions = function(change) {
         return this;
     }
 }
+
+let test = new PasUnePipe([0.5]).start();
