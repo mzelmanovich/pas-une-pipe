@@ -50,7 +50,7 @@ let addEnt = function(ent) {
     entries = entries.concat(ent);
 }
 
-let cleanEntries = function() {
+let getStates = function() {
     let keys = [];
     let obj = {};
     entries.forEach((el) => {
