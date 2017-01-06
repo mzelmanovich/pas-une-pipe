@@ -51,10 +51,14 @@ let addEnt = function(ent) {
 }
 
 let cleanEntries = function() {
-    let removes = entries.filter(ent => ent.intersectionRatio === 0);
-    return entries.filter(ent => {
-        let el = removes.search(rm => rm.target === ent.target);
-        return !el;
-    })
+    let dictionary = {};
+    entries.forEach((el) => {
+        if (dictionary[el.target]) {
+            dictionary[el.target].push(el);
+        } else {
+            dictionary[el.target] = [el];
+        }
+    });
+    return dictionary;
 }
 let test = new PasUnePipe([0.5]).addListener(addEnt).start();
