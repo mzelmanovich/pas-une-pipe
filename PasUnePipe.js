@@ -1,12 +1,15 @@
 let PasUnePipe = function(threshold) {
     this.viewObservers = [];
     this.functions = [];
+    //used to look at changes to elements in view port
     this.viewObserver = new IntersectionObserver(change => this.execFunctions(change), {
         threshold: threshold
     });
 
-    this.nodeObserver = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
+    //changes to dom. Then feeds those changes into viewObserver for processing.
+    //Set to only care about HTMLElements
+    this.nodeObserver = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
             mutation.addedNodes.forEach(el => el instanceof HTMLElement ? this.observeView(el) : null)
         });
     });
