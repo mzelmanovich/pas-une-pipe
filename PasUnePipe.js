@@ -94,6 +94,6 @@ let listener = (event) => {
 let test = new PasUnePipe([0.5]).addListener(listener).start();
 
 let testArea = function() {
-    state.calculateEndState((previous, current) =>
+    return state.calculateEndState((previous, current) =>
         (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
 }
