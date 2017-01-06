@@ -85,9 +85,15 @@ pupState.prototype.calculateEndState = function(reducer, initState) {
     return this.indexedStates.reduce((previous, current) => reducer(previous, current[current.length - 1]), initState);
 }
 
+
 let state = new pupState();
 
 let listener = (event) => {
     state.addEvent(event);
 };
 let test = new PasUnePipe([0.5]).addListener(listener).start();
+
+let testArea = function() {
+    state.calculateEndState((previous, current) =>
+        (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
+}
