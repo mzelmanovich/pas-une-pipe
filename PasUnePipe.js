@@ -51,14 +51,17 @@ let addEnt = function(ent) {
 }
 
 let cleanEntries = function() {
-    let dictionary = {};
+    let keys = [];
+    let obj = {};
     entries.forEach((el) => {
-        if (dictionary[el.target]) {
-            dictionary[el.target].push(el);
+        if (keys.indexOf(el.target) > -1) {
+            obj[keys.indexOf(el.target)].push(el);
         } else {
-            dictionary[el.target] = [el];
+            keys.push(el.target);
+            obj[keys.indexOf(el.target)] = [el];
         }
     });
-    return dictionary;
+    obj.keys = keys;
+    return obj;
 }
 let test = new PasUnePipe([0.5]).addListener(addEnt).start();
