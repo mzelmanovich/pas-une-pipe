@@ -1,8 +1,9 @@
 let PasUnePipe = function(threshold) {
     this.viewObservers = [];
     this.functions = [];
+    this.viewChanges = [];
     //used to look at changes to elements in view port
-    this.viewObserver = new IntersectionObserver(change => this.execFunctions(change), {
+    this.viewObserver = new IntersectionObserver(changes => changes.forEach(change => this.execFunctions(change)), {
         threshold: threshold
     });
 
@@ -45,23 +46,44 @@ PasUnePipe.prototype.execFunctions = function(change) {
     }
 }
 
-let entries = [];
-let addEnt = function(ent) {
-    entries = entries.concat(ent);
+PasUnePipe.prototype.addViewChange = function(ent) {
+    return () => {
+        this.viewChanges = this.viewChanges.concat(ent);
+        return this;
+    };
 }
 
-let getStates = function() {
-    let keys = [];
-    let obj = {};
-    entries.forEach((el) => {
-        if (keys.indexOf(el.target) > -1) {
-            obj[keys.indexOf(el.target)].push(el);
-        } else {
-            keys.push(el.target);
-            obj[keys.indexOf(el.target)] = [el];
-        }
-    });
-    obj.keys = keys;
-    return obj;
+
+
+let pupState = function(viewChanges) {
+    this.elementKeys = [];
+    this.indexedStates = [];
+    if (viewChanges) {
+        this.init(viewChanges);
+    }
 }
-let test = new PasUnePipe([0.5]).addListener(addEnt).start();
+
+pupState.prototype.init = function(viewChanges) {
+    viewChanges.forEach(el => this.addEvent.call(this, el));
+    return this;
+}
+
+pupState.prototype.addEvent = function(el) {
+    if (this.elementKeys.indexOf(el.target) > -1) {
+        this.indexedStates[this.elementKeys.indexOf(el.target)].push(el);
+    } else {
+        this.elementKeys.push(el.target);
+        this.indexedStates[this.elementKeys.indexOf(el.target)] = [el];
+    }
+}
+
+pupState.prototype.getStates = function(el) {
+    return this.indexedStates[this.elementKeys.indexOf(el)];
+}
+
+let state = new pupState();
+
+let listener = (event) => {
+    state.addEvent(event);
+}
+let test = new PasUnePipe([0.5]).addListener(listener).start();
