@@ -97,3 +97,5 @@ let testArea = function() {
     return state.calculateEndState((previous, current) =>
         (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
 }
+
+// TODO: Add image validation logic using natural Height and Width;
