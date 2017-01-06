@@ -47,6 +47,6 @@ PasUnePipe.prototype.execFunctions = function(change) {
 
 let entries = [];
 let addEnt = function(ent) {
-    entries.concat(ent);
+    entries = entries.concat(ent);
 }
 let test = new PasUnePipe([0.5]).addListener(addEnt).start();
