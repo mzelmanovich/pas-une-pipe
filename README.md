@@ -2,6 +2,7 @@
 
 Detects visual completeness of a webpage.
 
+
 Logic: 
 
 Gets all visible elements in the viewport within the body tag using Intersection Observer API. 
