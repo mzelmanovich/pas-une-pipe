@@ -89,8 +89,8 @@ pupState.prototype.reduceEndstate = function(reducer, initState) {
     return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
 }
 
-pupState.prototype.getEndState = function(reducer, initState) {
-    return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
+pupState.prototype.getEndState = function() {
+    return this.reduceEndstate((previous, current) => previous.concat(current), []).sort((aState, bState) => aState.time - bState.time);
 }
 
 pupState.prototype.getArea = function() {
