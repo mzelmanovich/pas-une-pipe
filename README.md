@@ -2,6 +2,7 @@
 
 Detects visual completeness of a webpage.
 
+-
 
 Logic: 
 
