@@ -70,15 +70,14 @@ pupState.prototype.init = function(viewChanges) {
 }
 
 pupState.prototype.addEvent = function(el) {
+    this.timeLine.push(el);
+    let timeLineIndex = this.timeLine.length - 1;
     let index = this.elementKeys.indexOf(el.target);
-    let refBuilder = (stateIndex, eventIndex) => () => this.indexedStates[stateIndex][eventIndex];
     if (index > -1) {
-        this.indexedStates[index].push(el);
-        this.timeLine.push(refBuilder(index, this.indexedStates[index].length - 1));
+        this.indexedStates[index].push(timeLineIndex);
     } else {
         this.elementKeys.push(el.target);
-        this.indexedStates[this.elementKeys.length - 1] = [el];
-        this.timeLine.push(refBuilder(this.indexedStates[this.elementKeys.length - 1], 0));
+        this.indexedStates[this.elementKeys.length - 1] = [timeLineIndex];
     }
 }
 
