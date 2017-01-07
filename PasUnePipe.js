@@ -89,8 +89,8 @@ pupState.prototype.reduceEndstate = function(reducer, initState) {
     return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
 }
 
-pupState.prototype.getEndState = function() {
-    return this.reduceEndstate((previous, current) => previous.concat(current), []).sort((aState, bState) => aState.time - bState.time);
+pupState.prototype.getVisableEndState = function() {
+    return this.reduceEndstate((previous, current) => previous.concat(current), []).filter(el => el.intersectionRatio > 0).sort((aState, bState) => aState.time - bState.time);
 }
 
 pupState.prototype.getVisableArea = function(state) {
@@ -104,7 +104,7 @@ pupState.prototype.getArea = function() {
 pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
     init = init || 0;
     let area = this.getArea();
-    let endState = this.getEndState();
+    let endState = this.getVisableEndState();
     return endState.reduceRight((prev, current, index) => {
         if (prev.precent < (1 - num)) {
             prev.timeIndex = index;
