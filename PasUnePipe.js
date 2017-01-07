@@ -93,9 +93,12 @@ pupState.prototype.getEndState = function() {
     return this.reduceEndstate((previous, current) => previous.concat(current), []).sort((aState, bState) => aState.time - bState.time);
 }
 
+pupState.prototype.getVisableArea = function(state) {
+    return state.intersectionRect.height * state.intersectionRect.width;
+}
 pupState.prototype.getArea = function() {
     return this.reduceEndstate((previous, current) =>
-        (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
+        this.getVisableArea(current) + previous, 0)
 }
 
 pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
