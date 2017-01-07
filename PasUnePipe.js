@@ -104,13 +104,14 @@ pupState.prototype.getArea = function() {
 pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
     init = init || 0;
     let area = this.getArea();
-    return this.timeLine.reduceRight((prev, current, index) => {
+    let endState = this.getEndState();
+    return endState.reduceRight((prev, current, index) => {
         if (prev.precent < (1 - num)) {
             prev.timeIndex = index;
-            prev.precent += ((current.intersectionRect.height * current.intersectionRect.width) / area);
+            prev.precent += this.getArea(current) / area;
         }
         return prev;
-    }, { timeIndex: null, precent: init })
+    }, { timeIndex: null, precent: init, array: endState })
 }
 
 let pupValidator = function() {
