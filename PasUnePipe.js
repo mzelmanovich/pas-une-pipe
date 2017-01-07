@@ -69,11 +69,15 @@ pupState.prototype.init = function(viewChanges) {
 }
 
 pupState.prototype.addEvent = function(el) {
-    if (this.elementKeys.indexOf(el.target) > -1) {
-        this.indexedStates[this.elementKeys.indexOf(el.target)].push(el);
+    let index = this.elementKeys.indexOf(el.target);
+    let refBuilder = (stateIndex, eventIndex) => () => this.indexedStates[stateIndex][eventIndex];
+    if (index > -1) {
+        this.indexedStates[index].push(el);
+        return refBuilder(index, this.indexedStates[index].length - 1);
     } else {
         this.elementKeys.push(el.target);
-        this.indexedStates[this.elementKeys.indexOf(el.target)] = [el];
+        this.indexedStates[this.elementKeys.length - 1] = [el];
+        return refBuilder(this.indexedStates[this.elementKeys.length - 1], 0);
     }
 }
 
@@ -83,6 +87,15 @@ pupState.prototype.getStates = function(el) {
 
 pupState.prototype.calculateEndState = function(reducer, initState) {
     return this.indexedStates.reduce((previous, current) => reducer(previous, current[current.length - 1]), initState);
+}
+
+let pupValidator = function() {
+
+}
+
+
+pupValidator.prototype.imgLoad = function(imgTag) {
+    return imgTag.naturalHeight > 0;
 }
 
 
@@ -101,4 +114,4 @@ let testArea = function() {
 // TODO: Add image validation logic using natural Height and Width;
 // -a image that hasn't loaded yet might not matter if the expected size doesn't impact 80% loaded mark
 // wait for .5s of no dom mutations to apply deduction logic 
-// deduction logic: remove last loaded elements until ~20% taken away, timestamp of last removed is visComplete 
+// deduction logic: remove last loaded elements until ~20% taken away, timestamp of last removed is visComplete
