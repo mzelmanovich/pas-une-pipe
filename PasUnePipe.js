@@ -86,7 +86,7 @@ pupState.prototype.getStates = function(el) {
 }
 
 pupState.prototype.calculateEndState = function(reducer, initState) {
-    return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine(current[current.length - 1])), initState);
+    return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
 }
 
 let pupValidator = function() {
