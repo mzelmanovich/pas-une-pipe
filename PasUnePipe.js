@@ -99,7 +99,7 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num) {
     return this.timeLine.reduceRight((prev, current, index) => {
         if (prev.precent < 1 - num) {
             prev.timeIndex = index;
-            prev.precent = (current.intersectionRect.height * current.intersectionRect.wight) / area;
+            prev.precent = ((current.intersectionRect.height * current.intersectionRect.wight) / area) + prev.precent;
         }
         return prev;
     }, { timeIndex: null, precent: 0 })
