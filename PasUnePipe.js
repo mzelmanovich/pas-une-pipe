@@ -89,6 +89,22 @@ pupState.prototype.calculateEndState = function(reducer, initState) {
     return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
 }
 
+pupState.prototype.getArea = function() {
+    return this.calculateEndState((previous, current) =>
+        (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
+}
+
+pupState.prototype.findVisiblyCompleteThreshold = function(num) {
+    let area = this.getArea();
+    return this.timeLine.reduceRight((prev, current, index) => {
+        if (prev.precent > 1 - num) {
+            prev.timeIndex = index;
+            prev.precent = (current.intersectionRect.height * current.intersectionRect.wight) / area;
+        }
+        return prev;
+    }, { timeIndex: null, precent: 0 })
+}
+
 let pupValidator = function() {
 
 }
