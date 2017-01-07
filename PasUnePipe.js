@@ -94,7 +94,8 @@ pupState.prototype.getArea = function() {
         (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
 }
 
-pupState.prototype.findVisiblyCompleteThreshold = function(num) {
+pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
+    init = init || 0;
     let area = this.getArea();
     return this.timeLine.reduceRight((prev, current, index) => {
         if (prev.precent < 1 - num) {
@@ -102,7 +103,7 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num) {
             prev.precent = ((current.intersectionRect.height * current.intersectionRect.wight) / area) + prev.precent;
         }
         return prev;
-    }, { timeIndex: null, precent: 0 })
+    }, { timeIndex: null, precent: init })
 }
 
 let pupValidator = function() {
