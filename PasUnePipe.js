@@ -58,6 +58,7 @@ PasUnePipe.prototype.addViewChange = function(ent) {
 let pupState = function(viewChanges) {
     this.elementKeys = [];
     this.indexedStates = [];
+    this.timeLine = [];
     if (viewChanges) {
         this.init(viewChanges);
     }
@@ -73,11 +74,11 @@ pupState.prototype.addEvent = function(el) {
     let refBuilder = (stateIndex, eventIndex) => () => this.indexedStates[stateIndex][eventIndex];
     if (index > -1) {
         this.indexedStates[index].push(el);
-        return refBuilder(index, this.indexedStates[index].length - 1);
+        this.timeLine.push(refBuilder(index, this.indexedStates[index].length - 1));
     } else {
         this.elementKeys.push(el.target);
         this.indexedStates[this.elementKeys.length - 1] = [el];
-        return refBuilder(this.indexedStates[this.elementKeys.length - 1], 0);
+        this.timeLine.push(refBuilder(this.indexedStates[this.elementKeys.length - 1], 0));
     }
 }
 
