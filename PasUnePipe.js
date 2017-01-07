@@ -85,12 +85,16 @@ pupState.prototype.getStates = function(el) {
     return this.indexedStates[this.elementKeys.indexOf(el)];
 }
 
-pupState.prototype.calculateEndState = function(reducer, initState) {
+pupState.prototype.reduceEndstate = function(reducer, initState) {
+    return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
+}
+
+pupState.prototype.getEndState = function(reducer, initState) {
     return this.indexedStates.reduce((previous, current) => reducer(previous, this.timeLine[current[current.length - 1]]), initState);
 }
 
 pupState.prototype.getArea = function() {
-    return this.calculateEndState((previous, current) =>
+    return this.reduceEndstate((previous, current) =>
         (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
 }
 
@@ -124,7 +128,7 @@ let listener = (event) => {
 let test = new PasUnePipe([0.5]).addListener(listener).start();
 
 let testArea = function() {
-    return state.calculateEndState((previous, current) =>
+    return state.reduceEndstate((previous, current) =>
         (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
 }
 
