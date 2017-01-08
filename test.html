@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title></title>
-	<style type="text/css">
-		#hello{ display:none; }
-		#bg{ background-image: url("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"); 
-		height: 100px;
-    	width: 100px; }
-	</style>
+    <title></title>
+    <style type="text/css">
+        #hello {
+            display: none;
+        }
+        
+        #bg {
+            background-image: url("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
+            height: 100px;
+            width: 100px;
+        }
+    </style>
 </head>
+
 <body>
-<div id="b"></div>
-<img id="img" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
-<img id="img" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
-<div id="hello"></div>
-<div id="1"></div>
-<div id="2"></div>
-<div id="3"></div>
-<div id="4"></div>
-<div id="5"></div>
-<div id="6"></div>
-<div id="7"></div>
-<div id="8"></div>
-<div id="9"></div>
-<div id="10"></div>
-<div id="11"></div>
+    <div id="b"></div>
+    <img id="img" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
+    <img id="img" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
+    <div id="hello"></div>
+    <div id="1"></div>
+    <div id="2"></div>
+    <div id="3"></div>
+    <div id="4"></div>
+    <div id="5"></div>
+    <div id="6"></div>
+    <div id="7"></div>
+    <div id="8"></div>
+    <div id="9"></div>
+    <div id="10"></div>
+    <div id="11"></div>
 </body>
 <script src="https://rawgit.com/mzelmanovich/pas-une-pipe/master/PasUnePipe.js"></script>
 <script type="text/javascript">
-function loopInsert(i) {
-    document.getElementById(i).innerHTML = "<img src='https://designthinking.ideo.com/wp-content/themes/standard/images/social/small/google_plus.png?" + i + "'>";
-}
-document.addEventListener("DOMContentLoaded", function(event) {
-    for (i=1; i<11; i++) {
-	setTimeout(loopInsert(i), 2000 * i);
-}
-});
+    function loopInsert(i) {
+        return () => {
+            document.getElementById(i).innerHTML = "<img src='https://designthinking.ideo.com/wp-content/themes/standard/images/social/small/google_plus.png?" + i + "'>";
+        }
+    }
+    document.addEventListener("DOMContentLoaded", function(event) {
+        for (i = 1; i < 11; i++) {
+            setTimeout(loopInsert(i), 200 * i);
+        }
+    });
 </script>
+
 </html>
