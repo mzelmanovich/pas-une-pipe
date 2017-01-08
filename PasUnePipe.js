@@ -45,12 +45,15 @@ PasUnePipe.prototype.resetTimeOut = function() {
     if (this.timeOut) {
         this.timeOut();
     }
-    let time = setTimeout(() => {
-        if (waiting) {
+    let toFnc = () => {
+        if (this.waiting) {
             this.waiting = false;
             this.calculatedState = this.state.findVisiblyCompleteThreshold(0.8);
+            console.log(this.calculatedState);
         }
-    }, 500);
+    }
+
+    let time = setTimeout(toFnc, 500);
     this.timeOut = () => clearTimeout(time);
 
 }
