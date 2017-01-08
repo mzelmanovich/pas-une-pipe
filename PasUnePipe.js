@@ -2,6 +2,7 @@ let PasUnePipe = function(threshold) {
     this.viewObservers = [];
     this.functions = [];
     this.viewChanges = [];
+    this.state = new pupState();
     //used to look at changes to elements in view port
     this.viewObserver = new IntersectionObserver(changes => changes.forEach(change => this.execFunctions(change)), {
         threshold: threshold
@@ -17,6 +18,9 @@ let PasUnePipe = function(threshold) {
 }
 
 PasUnePipe.prototype.start = function() {
+    this.addListener((event) => {
+        this.state.addEvent(event);
+    });
     let elements = document.body.getElementsByTagName('*');
     for (let el of elements) {
         this.observeView(el);
@@ -114,26 +118,9 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
     }, { timeIndex: null, precent: init, array: endState })
 }
 
-let pupValidator = function() {
-
-}
 
 
-pupValidator.prototype.imgLoad = function(imgTag) {
-    return imgTag.naturalHeight > 0;
-}
-
-
-let state = new pupState();
-
-let listener = (event) => {
-    state.addEvent(event);
-};
-
-let test = new PasUnePipe([0.5]).addListener(listener).start();
-let tester = state.findVisiblyCompleteThreshold(.8);
-let time = tester.array[4].time;
-document.getElementById('b').innerHTML = tester.array;
+let test = new PasUnePipe([0.5]).start();
 // TODO: Add image validation logic using natural Height and Width;
 // -a image that hasn't loaded yet might not matter if the expected size doesn't impact 80% loaded mark
 // wait for .5s of no dom mutations to apply deduction logic 
