@@ -129,13 +129,11 @@ let state = new pupState();
 let listener = (event) => {
     state.addEvent(event);
 };
+
 let test = new PasUnePipe([0.5]).addListener(listener).start();
-
-let testArea = function() {
-    return state.reduceEndstate((previous, current) =>
-        (current.intersectionRect.height * current.intersectionRect.width) + previous, 0)
-}
-
+let tester = state.findVisiblyCompleteThreshold(.8);
+let time = tester.array[4].time;
+document.getElementById('b').innerHTML = tester.array;
 // TODO: Add image validation logic using natural Height and Width;
 // -a image that hasn't loaded yet might not matter if the expected size doesn't impact 80% loaded mark
 // wait for .5s of no dom mutations to apply deduction logic 
