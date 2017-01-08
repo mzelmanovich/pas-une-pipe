@@ -168,7 +168,7 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
 
 
 
-let test = new PasUnePipe([0.5]).start();
+let test = new PasUnePipe([0.01]).start();
 // TODO: Add image validation logic using natural Height and Width;
 // -a image that hasn't loaded yet might not matter if the expected size doesn't impact 80% loaded mark
 // wait for .5s of no dom mutations to apply deduction logic 
