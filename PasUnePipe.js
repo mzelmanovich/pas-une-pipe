@@ -1,3 +1,4 @@
+let ryansVar = null;
 let PasUnePipe = function(threshold) {
     this.viewObservers = [];
     this.functions = [];
@@ -53,6 +54,7 @@ PasUnePipe.prototype.resetTimeOut = function() {
             this.waiting = false;
             this.calculatedState = this.state.findVisiblyCompleteThreshold(0.8);
             console.log(this.calculatedState);
+            ryansVar = this.calculatedState[this.calculatedState.length - 1].time;
         }
     }
 
