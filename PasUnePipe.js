@@ -158,12 +158,12 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
     let area = this.getArea();
     let endState = this.getVisableEndState();
     return endState.reduceRight((prev, current, index) => {
-        if (prev.precent < (1 - num)) {
+        if (prev.percent < (1 - num)) {
             prev.timeIndex = index;
-            prev.precent += this.getVisableArea(current) / area;
+            prev.percent += this.getVisableArea(current) / area;
         }
         return prev;
-    }, { timeIndex: null, precent: init, array: endState })
+    }, { timeIndex: null, percent: init, array: endState })
 }
 
 
