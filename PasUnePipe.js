@@ -54,12 +54,13 @@ PasUnePipe.prototype.resetTimeOut = function() {
             this.waiting = false;
             this.calculatedState = this.state.findVisiblyCompleteThreshold(0.8);
             console.log(this.calculatedState);
-            ryansVar = this.calculatedState.array[this.calculatedState.arraylength - 1].time;
+            ryansVar = this.calculatedState.array[this.calculatedState.array.length - 1].time;
         }
     }
 
     let time = setTimeout(toFnc, 500);
-    this.timeOut = () => clearTimeout(time);
+    let clearTimeoutBuilder = (time) => () => clearTimeout(time);
+    this.timeOut = () => clearTimeoutBuilder(time);
 
 }
 
