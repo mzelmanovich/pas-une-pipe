@@ -3,6 +3,9 @@ let PasUnePipe = function(threshold) {
     this.functions = [];
     this.viewChanges = [];
     this.state = new pupState();
+    this.timeOut = null;
+    this.waiting = true;
+    this.calculatedState = null;
     //used to look at changes to elements in view port
     this.viewObserver = new IntersectionObserver(changes => changes.forEach(change => this.execFunctions(change)), {
         threshold: threshold
@@ -18,15 +21,42 @@ let PasUnePipe = function(threshold) {
 }
 
 PasUnePipe.prototype.start = function() {
-    this.addListener((event) => {
-        this.state.addEvent(event);
-    });
+    this.addListener(this.listener());
     let elements = document.body.getElementsByTagName('*');
     for (let el of elements) {
         this.observeView(el);
     }
     this.bodyObserver = this.nodeObserver.observe(document.body, { subtree: true, attributes: false, childList: true, characterData: false });
     return this;
+}
+
+PasUnePipe.prototype.listener = function() {
+    return (event) => {
+        let start = this.getNumberOfElements();
+        this.state.addEvent(event);
+        let end = this.getNumberOfElements();
+        if (start < end) {
+            this.resetTimeOut();
+        }
+    }
+}
+
+PasUnePipe.prototype.resetTimeOut = function() {
+    if (this.timeOut) {
+        this.timeOut();
+    }
+    let time = setTimeout(() => {
+        if (waiting) {
+            this.waiting = false;
+            this.calculatedState = this.state.findVisiblyCompleteThreshold(0.8);
+        }
+    }, 500);
+    this.timeOut = () => clearTimeout(time);
+
+}
+
+PasUnePipe.prototype.getNumberOfElements = function() {
+    return this.state.elementKeys.length;
 }
 
 PasUnePipe.prototype.observeView = function(el) {
@@ -68,6 +98,13 @@ let pupState = function(viewChanges) {
     }
 }
 
+pupState.prototype.lastElementAddedAt = function() {
+    let state = this.getVisableEndState();
+    return state[state.length - 1] ? state[state.length - 1].time : null;
+};
+
+
+
 pupState.prototype.init = function(viewChanges) {
     viewChanges.forEach(el => this.addEvent.call(this, el));
     return this;
@@ -79,9 +116,11 @@ pupState.prototype.addEvent = function(el) {
     let index = this.elementKeys.indexOf(el.target);
     if (index > -1) {
         this.indexedStates[index].push(timeLineIndex);
+        return this;
     } else {
         this.elementKeys.push(el.target);
         this.indexedStates[this.elementKeys.length - 1] = [timeLineIndex];
+        return this;
     }
 }
 
