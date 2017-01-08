@@ -166,10 +166,4 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
     }, { timeIndex: null, percent: init, array: endState })
 }
 
-
-
 let test = new PasUnePipe([0.01]).start();
-// TODO: Add image validation logic using natural Height and Width;
-// -a image that hasn't loaded yet might not matter if the expected size doesn't impact 80% loaded mark
-// wait for .5s of no dom mutations to apply deduction logic 
-// deduction logic: remove last loaded elements until ~20% taken away, timestamp of last removed is visComplete
