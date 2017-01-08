@@ -1,4 +1,4 @@
-let = null;
+let ryansVar = null;
 let PasUnePipe = function(threshold) {
     this.viewObservers = [];
     this.functions = [];
