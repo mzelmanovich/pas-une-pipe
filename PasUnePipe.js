@@ -7,6 +7,7 @@ let PasUnePipe = function(threshold) {
     this.timeOut = null;
     this.waiting = true;
     this.calculatedState = null;
+    this.nodes = [];
     //used to look at changes to elements in view port
     this.viewObserver = new IntersectionObserver(changes => changes.forEach(change => this.execFunctions(change)), {
         threshold: threshold
@@ -16,9 +17,23 @@ let PasUnePipe = function(threshold) {
     //Set to only care about HTMLElements
     this.nodeObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(el => setTimeout(() => el instanceof HTMLElement ? this.observeView(el) : null, 150));
+            mutation.addedNodes.forEach(el => setTimeout(
+                () => {
+                    this.addNode(el);
+                    let fnc = el instanceof HTMLElement ? this.observeView(el) : null;
+                }, 150));
         });
     });
+}
+
+PasUnePipe.prototype.addNode = function(el) {
+    let index = this.nodes.indexOf(el);
+    if (index > -1) {
+        return index;
+    } else {
+        this.nodes.push(el);
+        return this.nodes.indexOf(el);
+    }
 }
 
 PasUnePipe.prototype.start = function() {
@@ -35,9 +50,9 @@ PasUnePipe.prototype.start = function() {
 
 PasUnePipe.prototype.listener = function() {
     return (event) => {
-        let start = this.getNumberOfElements();
+        let start = this.nodes.length;
         this.state.addEvent(event);
-        let end = this.getNumberOfElements();
+        let end = this.nodes.length;
         if (start < end) {
             this.resetTimeOut();
         }
