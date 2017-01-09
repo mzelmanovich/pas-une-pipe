@@ -42,9 +42,9 @@ PasUnePipe.prototype.start = function() {
         let elements = document.body.getElementsByTagName('*');
         for (let el of elements) {
             this.observeView(el);
+                this.bodyObserver = this.nodeObserver.observe(document.body, { subtree: true, attributes: false, childList: true, characterData: false });
         }
     }, 150)
-    this.bodyObserver = this.nodeObserver.observe(document.body, { subtree: true, attributes: false, childList: true, characterData: false });
     return this;
 }
 
