@@ -23,10 +23,12 @@ let PasUnePipe = function(threshold) {
 
 PasUnePipe.prototype.start = function() {
     this.addListener(this.listener());
-    let elements = document.body.getElementsByTagName('*');
-    for (let el of elements) {
-        this.observeView(el);
-    }
+    setTimeout(() => {
+        let elements = document.body.getElementsByTagName('*');
+        for (let el of elements) {
+            this.observeView(el);
+        }
+    }, 150)
     this.bodyObserver = this.nodeObserver.observe(document.body, { subtree: true, attributes: false, childList: true, characterData: false });
     return this;
 }
