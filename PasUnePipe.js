@@ -16,7 +16,7 @@ let PasUnePipe = function(threshold) {
     //Set to only care about HTMLElements
     this.nodeObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(el => el instanceof HTMLElement ? this.observeView(el) : null)
+            mutation.addedNodes.forEach(el => setTimeout(() => el instanceof HTMLElement ? this.observeView(el) : null));
         });
     });
 }
@@ -167,9 +167,3 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
 }
 
 let test = new PasUnePipe([0.01]).start();
-
-document.getElementById(1).innerHTML = "<img id ='mitch' src='http://www.erare.eu/sites/default/files/DFG_0.png?" + 1 + "'>";
-let mitchObs = new IntersectionObserver(changes => changes.forEach(change => console.log(change)), {
-    threshold: [0.01]
-});
-setTimeout(() => mitchObs.observe(document.getElementById('mitch')));
