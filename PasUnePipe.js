@@ -167,3 +167,9 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
 }
 
 let test = new PasUnePipe([0.01]).start();
+
+document.getElementById(1).innerHTML = "<img id ='mitch' src='http://www.erare.eu/sites/default/files/DFG_0.png?" + 1 + "'>";
+let mitchObs = new IntersectionObserver(changes => changes.forEach(change => console.log(change)), {
+    threshold: [0.01]
+});
+mitchObs.observe(document.getElementById('mitch')[0]);
