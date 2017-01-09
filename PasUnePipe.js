@@ -69,7 +69,7 @@ PasUnePipe.prototype.resetTimeOut = function() {
             this.waiting = false;
             this.calculatedState = this.state.findVisiblyCompleteThreshold(0.8);
             console.log(this.calculatedState, this.state.timeLine.length);
-            ryansVar = this.calculatedState.array[this.calculatedState.array.length - 1].time;
+           // ryansVar = this.calculatedState.array[this.calculatedState.array.length - 1].time;
         }
     }
 
@@ -182,3 +182,5 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
 }
 
 let test = new PasUnePipe([0.01]).start();
+
+window.onload = function () {ryansVar = test.state.timeLine[test.state.timeLine.length-1].time};
