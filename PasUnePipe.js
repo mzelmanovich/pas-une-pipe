@@ -16,7 +16,7 @@ let PasUnePipe = function(threshold) {
     //Set to only care about HTMLElements
     this.nodeObserver = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(el => setTimeout(() => el instanceof HTMLElement ? this.observeView(el) : null, 2));
+            mutation.addedNodes.forEach(el => setTimeout(() => el instanceof HTMLElement ? this.observeView(el) : null, 10));
         });
     });
 }
