@@ -183,4 +183,7 @@ pupState.prototype.findVisiblyCompleteThreshold = function(num, init) {
 
 let test = new PasUnePipe([0.01]).start();
 
-window.onload = function () {ryansVar = test.state.timeLine[test.state.timeLine.length-1].time};
+setTimeout(function () {
+    ryansVar = test.state.timeLine[test.state.timeLine.length-1].time;
+    document.getElementById("visComplete").innerHTML = Math.round(ryansVar) + " ms";
+                       }, 1000);
