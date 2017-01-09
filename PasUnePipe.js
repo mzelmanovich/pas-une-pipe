@@ -53,7 +53,7 @@ PasUnePipe.prototype.listener = function() {
         let start = this.nodes.length;
         this.state.addEvent(event);
         let end = this.nodes.length;
-        if (start < end) {
+        if (start < end || !this.timeOut) {
             this.resetTimeOut();
         }
     }
