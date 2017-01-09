@@ -172,4 +172,4 @@ document.getElementById(1).innerHTML = "<img id ='mitch' src='http://www.erare.e
 let mitchObs = new IntersectionObserver(changes => changes.forEach(change => console.log(change)), {
     threshold: [0.01]
 });
-mitchObs.observe(document.getElementById('mitch')[0]);
+mitchObs.observe(document.getElementById('mitch'));
