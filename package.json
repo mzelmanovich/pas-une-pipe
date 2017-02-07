@@ -1,0 +1,19 @@
+{
+  "name": "pas-une-pipe",
+  "version": "1.0.0",
+  "description": "tool to get metrics",
+  "main": "dist/index.js",
+  "repository": "https://github.com/mzelmanovich/pas-une-pipe.git",
+  "author": "Mitchell Zelmanovich <mzelmanovich@gmail.com>",
+  "license": "MIT",
+   "scripts": {
+        "webpack:watch": "./node_modules/webpack/bin/webpack.js -w"
+   },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "webpack": "^2.2.1"
+  }
+}
