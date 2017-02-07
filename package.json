@@ -1,0 +1,9 @@
+{
+  "name": "pas-une-pipe",
+  "version": "1.0.0",
+  "description": "tool to get metrics",
+  "main": "index.js",
+  "repository": "https://github.com/mzelmanovich/pas-une-pipe.git",
+  "author": "Mitchell Zelmanovich <mzelmanovich@gmail.com>",
+  "license": "MIT"
+}
