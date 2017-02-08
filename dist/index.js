@@ -146,14 +146,11 @@ var ElVisible = function (_Emitter) {
 
         var _this = _possibleConstructorReturn(this, (ElVisible.__proto__ || Object.getPrototypeOf(ElVisible)).call(this));
 
-        console.log(args);
         _this.intersectionObs = new IntersectionObserver(function (changes) {
             return changes.forEach(function (change) {
                 return _this.emit('changeDetected', change);
             });
-        }, {
-            threshold: args
-        });
+        }, { threshold: args });
         return _this;
     }
 

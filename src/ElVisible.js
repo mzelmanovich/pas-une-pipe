@@ -3,10 +3,7 @@ import Emitter from './Emitter.js';
 export default class ElVisible extends Emitter {
     constructor(...args) {
         super();
-        console.log(args);
-        this.intersectionObs = new IntersectionObserver(changes => changes.forEach(change => this.emit('changeDetected', change)), {
-            threshold: args
-        });
+        this.intersectionObs = new IntersectionObserver(changes => changes.forEach(change => this.emit('changeDetected', change)), { threshold: args });
     }
 
     watch(el) {
@@ -18,7 +15,6 @@ export default class ElVisible extends Emitter {
         for (let el of currentElements) {
             this.watch(el);
         }
-
     }
 
 
