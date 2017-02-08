@@ -13,5 +13,13 @@ export default class ElVisible extends Emitter {
         this.intersectionObs.observe(el);
     }
 
+    watchCurrent() {
+        const currentElements = document.body.getElementsByTagName('*');
+        for (let el of currentElements) {
+            this.watch(el);
+        }
+
+    }
+
 
 }
