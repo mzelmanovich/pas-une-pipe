@@ -21,7 +21,7 @@ export default class Pup extends Emitter {
         newChange.target = change.target;
         newChange.area = change.intersectionRect.height * change.intersectionRect.width;
 
-        console.log(newChange);
+        console.log(newChange, change);
     }
 
     handleNodeAdded(el) {

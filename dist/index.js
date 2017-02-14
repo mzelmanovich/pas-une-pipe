@@ -330,7 +330,7 @@ var Pup = function (_Emitter) {
             newChange.target = change.target;
             newChange.area = change.intersectionRect.height * change.intersectionRect.width;
 
-            console.log(newChange);
+            console.log(newChange, change);
         }
     }, {
         key: 'handleNodeAdded',
