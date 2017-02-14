@@ -324,7 +324,13 @@ var Pup = function (_Emitter) {
     _createClass(Pup, [{
         key: 'handleVisChange',
         value: function handleVisChange(change) {
-            console.log(change);
+            var newChange = {};
+            newChange.ratio = change.intersectionRatio;
+            newChange.time = this.visWatcher.createdAt + change.time;
+            newChange.target = change.target;
+            newChange.area = change.intersectionRect.height * change.intersectionRect.width;
+
+            console.log(newChange);
         }
     }, {
         key: 'handleNodeAdded',

@@ -15,7 +15,13 @@ export default class Pup extends Emitter {
     }
 
     handleVisChange(change) {
-        console.log(change);
+        let newChange = {};
+        newChange.ratio = change.intersectionRatio;
+        newChange.time = this.visWatcher.createdAt + change.time;
+        newChange.target = change.target;
+        newChange.area = change.intersectionRect.height * change.intersectionRect.width;
+
+        console.log(newChange);
     }
 
     handleNodeAdded(el) {
