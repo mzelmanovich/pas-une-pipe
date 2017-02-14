@@ -1,9 +1,3 @@
-import ElWatcher from './ElWatcher.js';
-import ElVisible from './ElVisible.js';
+import Pup from './Pup';
 
-const nodeWatcher = new ElWatcher();
-const visWatcher = new ElVisible(0.01);
-
-visWatcher.on('changeDetected', change => console.log(change));
-nodeWatcher.on('elAdded', el => visWatcher.watch(el));
-nodeWatcher.start();
+const pup = new Pup(true);

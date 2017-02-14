@@ -1,50 +1,291 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
-    <title></title>
-    <style type="text/css">
-        #hello {
-            display: none;
+    <title>glimpse test</title>
+    <meta name="robots" content="nofollow">
+    <style>
+        body {
+            background-color: #99CCFF;
         }
         
-        #bg {
-            background-image: url("https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png");
-            height: 100px;
-            width: 100px;
+        p {
+            font-size: 25px;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript">
+        var perfMarks;
+        window.performance.mark('mark_fully_visible');
+        window.performance.mark('mark_above_the_fold');
+
+        var WindowEvent, e;
+        (function(n) {
+            n[n.Load = "load"] = "Load";
+            n[n.BeforeUnload = "beforeunload"] = "BeforeUnload";
+            n[n.Abort = "abort"] = "Abort";
+            n[n.Error = "error"] = "Error"
+        })(WindowEvent || (WindowEvent = {}));
+        var AjaxTiming = function() {
+                function n(n, t, i, r) {
+                    var u = this;
+                    this.getPerformanceTimings = function(n) {
+                        u.connect = n.connectEnd - n.connectStart;
+                        u.dns = n.domainLookupEnd - n.domainLookupStart;
+                        u.duration = n.duration;
+                        u.load = n.responseEnd - n.requestStart;
+                        u.wait = n.startTime;
+                        u.redirect = n.redirectEnd - n.redirectStart;
+                        n.secureConnectionStart && (u.ssl = n.connectEnd - n.secureConnectionStart)
+                    };
+                    this.url = n;
+                    this.method = t;
+                    this.isAsync = i;
+                    this.open = r
+                }
+                return n
+            }(),
+            ProfilerJsError = function() {
+                function n(n, t, i) {
+                    this.count = 0;
+                    this.message = n;
+                    this.url = t;
+                    this.lineNumber = i
+                }
+                return n.createText = function(n, t, i) {
+                    return [n, t, i].join(":")
+                }, n.prototype.getText = function() {
+                    return n.createText(this.message, this.url, this.lineNumber)
+                }, n
+            }(),
+            ProfilerEventManager = function() {
+                function n() {
+                    this.events = [];
+                    this.hasAttachEvent = typeof attachEvent == "function"
+                }
+                return n.prototype.add = function(n, t, i) {
+                    this.events.push({
+                        type: n,
+                        target: t,
+                        func: i
+                    });
+                    this.hasAttachEvent ? t.attachEvent("on" + n, i) : t.addEventListener(n, i, !1)
+                }, n.prototype.clear = function() {
+                    for (var n, t = 0, i = this.events; t < i.length; t++) n = i[t], this.hasAttachEvent ? n.target.detachEvent(n.type, n.func) : n.target.removeEventListener(n.type, n.func, !1);
+                    this.events = []
+                }, n
+            }(),
+            RProfiler = function() {
+                function n() {
+                    var n = this,
+                        u, f, t, i, e;
+                    if (this.restUrl = "g.3gl.net/jp/266/v3/M", this.startTime = (new Date).getTime(), this.info = {}, this.hasInsight = !1, this.data = {
+                            start: this.startTime,
+                            jsCount: 0,
+                            jsErrors: [],
+                            loadTime: -1,
+                            loadFired: !1,
+                            ajax: []
+                        }, this.eventManager = new ProfilerEventManager, this.startAjaxCapture = function() {
+                            var i = XMLHttpRequest.prototype,
+                                o = i.open,
+                                s = i.send,
+                                r = [],
+                                u = {},
+                                e = n.data.ajax,
+                                h = 25,
+                                f = typeof performance == "object" && typeof window.performance.now == "function" && typeof window.performance.getEntriesByType == "function",
+                                t;
+                            f && window.performance.setResourceTimingBufferSize(300);
+                            t = function() {
+                                return f ? window.performance.now() : (new Date).getTime()
+                            };
+                            i.open = function(n, i, u, f, e) {
+                                u === void 0 && (u = !0);
+                                this.rpIndex = r.length;
+                                r.push(new AjaxTiming(i, n, u, t()));
+                                o.call(this, n, i, u, f, e)
+                            };
+                            i.send = function(n) {
+                                var i = this,
+                                    c = this.onreadystatechange,
+                                    o;
+                                (this.onreadystatechange = function() {
+                                    var n = r[i.rpIndex],
+                                        o;
+                                    if (n) {
+                                        o = i.readyState;
+                                        switch (o) {
+                                            case 1:
+                                                n.connectionEstablished = t();
+                                                break;
+                                            case 2:
+                                                n.requestReceived = t();
+                                                break;
+                                            case 3:
+                                                n.processingTime = t();
+                                                break;
+                                            case 4:
+                                                n.complete = t();
+                                                n.responseSize = i.responseText.length,
+                                                    function(n) {
+                                                        setTimeout(function() {
+                                                            var r, s, h, c, o;
+                                                            if (f) {
+                                                                var i = n.url,
+                                                                    t = [],
+                                                                    l = performance.getEntriesByType("resource");
+                                                                for (r = 0, s = l; r < s.length; r++) h = s[r], h.name == i && t.push(h);
+                                                                if (e.push(n), t.length != 0) {
+                                                                    if (u[i] || (u[i] = []), t.length == 1) {
+                                                                        n.getPerformanceTimings(t[0]);
+                                                                        u[i].push(0);
+                                                                        return
+                                                                    }
+                                                                    c = u[i];
+                                                                    for (o in t)
+                                                                        if (c.indexOf(o) == -1) {
+                                                                            n.getPerformanceTimings(t[o]);
+                                                                            c.push(o);
+                                                                            return
+                                                                        }
+                                                                    n.getPerformanceTimings(t[0])
+                                                                }
+                                                            }
+                                                        }, h)
+                                                    }(n, e)
+                                        }
+                                        typeof c == "function" && c.call(i)
+                                    }
+                                }, o = r[this.rpIndex], o) && (n && !isNaN(n.length) && (o.sendSize = n.length), o.send = t(), s.call(this, n))
+                            }
+                        }, this.recordPageLoad = function() {
+                            n.data.loadTime = (new Date).getTime();
+                            n.data.loadFired = !0
+                        }, this.addError = function(t, i, r) {
+                            var s, f, u, e, o;
+                            for (n.data.jsCount++, s = ProfilerJsError.createText(t, i, r), f = n.data.jsErrors, u = 0, e = f; u < e.length; u++)
+                                if (o = e[u], o.getText() == s) {
+                                    o.count++;
+                                    return
+                                }
+                            f.push(new ProfilerJsError(t, i, r))
+                        }, this.addInfo = function(t, i, r) {
+                            if (!n.isNullOrEmpty(t)) {
+                                if (n.isNullOrEmpty(r)) n.info[t] = i;
+                                else {
+                                    if (n.isNullOrEmpty(i)) return;
+                                    n.isNullOrEmpty(n.info[t]) && (n.info[t] = {});
+                                    n.info[t][i] = r
+                                }
+                                n.hasInsight = !0
+                            }
+                        }, this.clearInfo = function() {
+                            n.info = {};
+                            n.hasInsight = !1
+                        }, this.getInfo = function() {
+                            return n.hasInsight ? n.info : null
+                        }, this.eventManager.add(WindowEvent.Load, window, this.recordPageLoad), u = this.addError, this.startAjaxCapture(), !window.opera) "onerror" in window && (f = window.onerror, window.onerror = function(n, t, i) {
+                        return (u(n, t, i), !!f) ? f(n, t, i) : !1
+                    });
+                    else {
+                        function s(n) {
+                            var t = n.target || n.srcElement;
+                            return t.nodeType == 3 && (t = t.parentNode), u("N/A", t.src || t.URL, -1), !1
+                        }
+                        this.eventManager.add(WindowEvent.Error, document, s)
+                    }!window.__cpCdnPath || (this.restUrl = window.__cpCdnPath.trim());
+                    t = document.createElement("iframe");
+                    i = t.style;
+                    i.position = "absolute";
+                    i.top = "-10000px";
+                    i.left = "-1000px";
+                    e = document.getElementsByTagName("script")[0];
+                    e.parentNode.insertBefore(t, e);
+                    var o = t.contentWindow.document.open("text/html", "replace"),
+                        h = window.location.protocol + "//",
+                        r = '<body onload="';
+                    r += "function s(u){var d=document,s=d.createElement('script');s.type='text/javascript';s.src=u;d.body.appendChild(s);}";
+                    r += "s('" + h + this.restUrl + "');";
+                    r += '"><\/body>';
+                    o.write(r);
+                    o.close()
+                }
+                return n.prototype.isNullOrEmpty = function(n) {
+                    if (n === undefined || n === null) return !0;
+                    if (typeof n == "string") {
+                        var t = n;
+                        return t.trim().length == 0
+                    }
+                    return !1
+                }, n
+            }(),
+            profiler = new RProfiler;
+        window.RProfiler = profiler;
+        window.WindowEvent = WindowEvent;
+        e = new CustomEvent("GlimpseLoaded");
+        window.dispatchEvent(e);
+    </script>
 </head>
 
-<body>
-    <div id="b"></div>
+<body onload="markFullyLoaded()">
+    <a href="http://rpellette.com/glimpse/one.html">
+        <h1>Testing Site</h1>
+    </a>
+    <!-- page group -->
+    <div id="container" class=""></div>
+    <script type="text/javascript">
+        var pageNameArray = ['home', 'product', 'confirmation'];
+        var pageName = pageNameArray[Math.floor(Math.random() * pageNameArray.length)];
+        document.getElementById("container").className = pageName;
+    </script>
+    <!-- insight -->
+    <p>server: <span id="server"></span></p>
+    <p>host: <span id="host"></span></p>
+    <p>version: <span id="version"></span></p>
+    <p>server time: <span id="serverTime"></span></p>
+    <strong><p>visually complete: <span id="visComplete"></span></p></strong>
     <img id="img" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
-    <img id="img" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
-    <div id="hello"></div>
-    <div id="1"></div>
-    <div id="2"></div>
-    <div id="3"></div>
-    <div id="4"></div>
-    <div id="5"></div>
-    <div id="6"></div>
-    <div id="7"></div>
-    <div id="8"></div>
-    <div id="9"></div>
-    <div id="10"></div>
-    <div id="11"></div>
+    <img id="img" src="https://media.giphy.com/media/c9ndlj2AUhaqk/giphy-facebook_s.jpg">
+    <!-- Glimpse Tokens-->
+    <script type="text/javascript">
+        // insight
+        var serverArray = ['server1', 'server2', 'server3', 'server4', 'server5'];
+        var serverName = serverArray[Math.floor(Math.random() * serverArray.length)];
+        var hostArray = ['host01', 'host02', 'host03', 'host04', 'host05', 'host06', 'host07', 'host08', 'host09', 'host10', 'host11', 'host12', 'host13', 'host14', 'host15', 'host16', 'host17', 'host18', 'hos19', 'host20'];
+        var hostName = hostArray[Math.floor(Math.random() * hostArray.length)];
+        var srvMin = -20;
+        var srvMax = 1000;
+        var serverTime = Math.floor(Math.random() * (srvMax - srvMin + 1)) + srvMin;
+        RProfiler.addInfo('indicator', 'servertime', serverTime);
+        RProfiler.addInfo('tracepoint', 'servername', serverName);
+        RProfiler.addInfo('tracepoint', 'hostname', hostName);
+        // variation
+        var variationArray = ['a', 'b', 'c'];
+        var version = variationArray[Math.floor(Math.random() * variationArray.length)];
+        RProfiler.addInfo('variation', version);
+        //RProfiler.addInfo('tracepoint', 'version',  version);
+        // page group
+        var pageGroup = document.getElementById("container").className;
+        RProfiler.addInfo('pageGroup', pageGroup);
+        // sale/conversion
+        var min = 1.25;
+        var max = 90.25;
+        var sales = Math.floor(Math.random() * (max - min + 1)) + min;
+        var items = Math.floor(Math.random() * 10)
+        RProfiler.addInfo('conversion', sales, items);
+        // write values to page
+        document.getElementById("server").innerHTML = serverName;
+        document.getElementById("host").innerHTML = hostName;
+        document.getElementById("serverTime").innerHTML = serverTime;
+        document.getElementById("version").innerHTML = version;
+
+        function markFullyLoaded() {
+            window.performance.mark('mark_fully_loaded');
+            perfMarks = window.performance.getEntriesByType('mark');
+        }
+    </script>
+    <script src="https://rawgit.com/mzelmanovich/pas-une-pipe/v1.0/dist/index.js"></script>
 </body>
-<script src="https://rawgit.com/mzelmanovich/pas-une-pipe/master/PasUnePipe.js"></script>
-<script type="text/javascript">
-    function loopInsert(i) {
-        return () => {
-            document.getElementById(i).innerHTML = "<img src='https://designthinking.ideo.com/wp-content/themes/standard/images/social/small/google_plus.png?" + i + "'>";
-        }
-    }
-    document.addEventListener("DOMContentLoaded", function(event) {
-        for (i = 1; i < 11; i++) {
-            setTimeout(loopInsert(i), 200 * i);
-        }
-    });
-</script>
 
 </html>
