@@ -12,6 +12,8 @@ export default class Pup extends Emitter {
         if (start) {
             this.start();
         }
+        this.total = 0;
+        this.lastAreaPrecent = 0;
     }
 
     handleVisChange(change) {

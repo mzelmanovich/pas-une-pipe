@@ -264,7 +264,7 @@ var _Pup2 = _interopRequireDefault(_Pup);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var pup = new _Pup2.default(true);
+window.pup = new _Pup2.default(true);
 
 /***/ }),
 /* 4 */
@@ -318,6 +318,8 @@ var Pup = function (_Emitter) {
         if (start) {
             _this.start();
         }
+        _this.total = 0;
+        _this.lastAreaPrecent = 0;
         return _this;
     }
 

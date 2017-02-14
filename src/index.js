@@ -1,3 +1,3 @@
 import Pup from './Pup';
 
-const pup = new Pup(true);
+window.pup = new Pup(true);
