@@ -151,6 +151,7 @@ var ElVisible = function (_Emitter) {
                 return _this.emit('changeDetected', change);
             });
         }, { threshold: args });
+        _this.createdAt = Date.now();
         return _this;
     }
 
