@@ -22,8 +22,8 @@ export default class Pup extends Emitter {
         });
     }
     handleVisChange(change) {
-        let newChange = {};
-        let target = change.target;
+        const newChange = {};
+        const target = change.target;
         newChange.ratio = change.intersectionRatio;
         newChange.time = this.visWatcher.createdAt + change.time;
         newChange.area = change.intersectionRect.height * change.intersectionRect.width;
@@ -31,7 +31,6 @@ export default class Pup extends Emitter {
             this.enableTracking(target);
         }
         target.pupTracking.states.push(newChange);
-        console.log(newChange.target);
     }
 
     handleNodeAdded(el) {

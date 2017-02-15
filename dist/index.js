@@ -343,7 +343,6 @@ var Pup = function (_Emitter) {
                 this.enableTracking(target);
             }
             target.pupTracking.states.push(newChange);
-            console.log(newChange.target);
         }
     }, {
         key: 'handleNodeAdded',
