@@ -335,14 +335,14 @@ var Pup = function (_Emitter) {
         key: 'handleVisChange',
         value: function handleVisChange(change) {
             var newChange = {};
+            var target = change.target;
             newChange.ratio = change.intersectionRatio;
             newChange.time = this.visWatcher.createdAt + change.time;
-            newChange.target = change.target;
             newChange.area = change.intersectionRect.height * change.intersectionRect.width;
-            if (!newChange.target.pupTracking) {
-                this.enableTracking(newChange.target);
+            if (!target.pupTracking) {
+                this.enableTracking(target);
             }
-            newChange.target.pupTracking.states.push(newChange);
+            target.pupTracking.states.push(newChange);
             console.log(newChange.target);
         }
     }, {
