@@ -15,15 +15,23 @@ export default class Pup extends Emitter {
         this.total = 0;
         this.lastAreaPrecent = 0;
     }
-
+    enableTracking(target) {
+        Object.defineProperty(target, 'pupTracking', {
+            enumerable: false,
+            value: { states: [] }
+        });
+    }
     handleVisChange(change) {
         let newChange = {};
         newChange.ratio = change.intersectionRatio;
         newChange.time = this.visWatcher.createdAt + change.time;
         newChange.target = change.target;
         newChange.area = change.intersectionRect.height * change.intersectionRect.width;
-
-        console.log(newChange, change);
+        if (!newChange.target.pupTracking) {
+            this.enableTracking(newChange.target);
+        }
+        newChange.pupTracking.states.push(newChange);
+        console.log(newChange.target);
     }
 
     handleNodeAdded(el) {
