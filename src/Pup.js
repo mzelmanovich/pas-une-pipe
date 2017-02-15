@@ -30,7 +30,7 @@ export default class Pup extends Emitter {
         if (!newChange.target.pupTracking) {
             this.enableTracking(newChange.target);
         }
-        newChange.pupTracking.states.push(newChange);
+        newChange.target.pupTracking.states.push(newChange);
         console.log(newChange.target);
     }
 
