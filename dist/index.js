@@ -192,8 +192,10 @@ var Pup = function (_Emitter) {
             var delta = states[states.length - 1].area - (states[states.length - 2] ? states[states.length - 2].area : 0);
             this.total += delta;
             states[states.length - 1].percentChange = 100 * (delta / this.total);
-
+            console.log("target:" + target);
             console.log(target.pupTracking);
+
+            console.log("running total: " + this.total);
         }
     }, {
         key: 'handleNodeAdded',
