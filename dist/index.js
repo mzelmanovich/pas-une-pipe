@@ -192,13 +192,14 @@ var Pup = function (_Emitter) {
 
             if (length > 1) {
                 var delta = state[length - 1].area - state[length - 2].area;
-                this.total += delta;
-                if (this.total != 0) {
-                    state[length - 1].percentChange = 100 * (delta / this.total);
+                target.pupTracking.total += delta;
+                if (target.pupTracking.total != 0) {
+                    state[length - 1].percentChange = 100 * (delta / target.pupTracking.total);
                 }
             } else {
                 //First state instance
                 state[length - 1].percentChange = 0;
+                target.pupTracking.total = 0;
             }
             console.log(state);
         }
