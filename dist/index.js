@@ -187,20 +187,11 @@ var Pup = function (_Emitter) {
             }
             target.pupTracking.states.push(newChange);
 
-            var state = target.pupTracking.states;
-            var length = state.length;
+            var states = target.pupTracking.states;
+            var delta = state[length - 1].area - (state[length - 2].area || 0);
+            this.total += delta;
+            state[length - 1].percentChange = 100 * (delta / this.total);
 
-            if (length > 1) {
-                var delta = state[length - 1].area - state[length - 2].area;
-                target.pupTracking.total += delta;
-                if (target.pupTracking.total != 0) {
-                    state[length - 1].percentChange = 100 * (delta / target.pupTracking.total);
-                }
-            } else {
-                //First state instance
-                state[length - 1].percentChange = 0;
-                target.pupTracking.total = 0;
-            }
             console.log(target.pupTracking);
         }
     }, {
