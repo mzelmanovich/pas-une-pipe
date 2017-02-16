@@ -34,11 +34,10 @@ export default class Pup extends Emitter {
 
         let states = target.pupTracking.states;
 
-        if (states[length-2]) {
-            let delta = states[length - 1].area - (states[length-2].area || 0);
-            this.total += delta;
-            states[length - 1].percentChange = 100 * (delta/this.total);
-        }
+        let delta = states[length - 1].area - (states[length-2] ? states[length-2].area : 0);
+        this.total += delta;
+        states[length - 1].percentChange = 100 * (delta/this.total);
+    
 
         console.log(target.pupTracking);
         

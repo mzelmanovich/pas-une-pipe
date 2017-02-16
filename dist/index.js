@@ -189,11 +189,9 @@ var Pup = function (_Emitter) {
 
             var states = target.pupTracking.states;
 
-            if (states[length - 2]) {
-                var delta = states[length - 1].area - (states[length - 2].area || 0);
-                this.total += delta;
-                states[length - 1].percentChange = 100 * (delta / this.total);
-            }
+            var delta = states[length - 1].area - (states[length - 2] ? states[length - 2].area : 0);
+            this.total += delta;
+            states[length - 1].percentChange = 100 * (delta / this.total);
 
             console.log(target.pupTracking);
         }
