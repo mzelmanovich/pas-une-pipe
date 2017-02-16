@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -111,6 +111,117 @@ exports.default = Emitter;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _ElWatcher = __webpack_require__(3);
+
+var _ElWatcher2 = _interopRequireDefault(_ElWatcher);
+
+var _ElVisible = __webpack_require__(2);
+
+var _ElVisible2 = _interopRequireDefault(_ElVisible);
+
+var _Emitter2 = __webpack_require__(0);
+
+var _Emitter3 = _interopRequireDefault(_Emitter2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Pup = function (_Emitter) {
+    _inherits(Pup, _Emitter);
+
+    function Pup(start) {
+        _classCallCheck(this, Pup);
+
+        var _this = _possibleConstructorReturn(this, (Pup.__proto__ || Object.getPrototypeOf(Pup)).call(this));
+
+        _this.nodeWatcher = new _ElWatcher2.default();
+        _this.visWatcher = new _ElVisible2.default(0.01);
+        _this.visWatcher.on('changeDetected', function (change) {
+            return _this.handleVisChange(change);
+        });
+        _this.nodeWatcher.on('elAdded', function (el) {
+            return _this.handleNodeAdded(el);
+        });
+        if (start) {
+            _this.start();
+        }
+        _this.total = 0;
+        _this.lastAreaPercent = 0;
+        return _this;
+    }
+
+    _createClass(Pup, [{
+        key: 'enableTracking',
+        value: function enableTracking(target) {
+            Object.defineProperty(target, 'pupTracking', {
+                enumerable: false,
+                value: { states: [] }
+            });
+        }
+    }, {
+        key: 'handleVisChange',
+        value: function handleVisChange(change) {
+            var newChange = {};
+            var target = change.target;
+            newChange.ratio = change.intersectionRatio;
+            newChange.time = this.visWatcher.createdAt + change.time;
+            newChange.area = change.intersectionRect.height * change.intersectionRect.width;
+            if (!target.pupTracking) {
+                this.enableTracking(target);
+            }
+            target.pupTracking.states.push(newChange);
+
+            var state = target.pupTracking.states;
+            var length = state.length;
+
+            if (length > 1) {
+                var delta = state[length - 1].area - state[length - 2].area;
+                this.total += delta;
+                if (this.total != 0) {
+                    state[length - 1].percentChange = 100 * (delta / this.total);
+                }
+            } else {
+                //First state instance
+                state[length - 1].percentChange = 0;
+            }
+            console.log(state);
+        }
+    }, {
+        key: 'handleNodeAdded',
+        value: function handleNodeAdded(el) {
+            this.visWatcher.watch(el);
+        }
+    }, {
+        key: 'start',
+        value: function start() {
+            this.visWatcher.watchCurrent();
+            this.nodeWatcher.start();
+        }
+    }]);
+
+    return Pup;
+}(_Emitter3.default);
+
+exports.default = Pup;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -197,7 +308,7 @@ var ElVisible = function (_Emitter) {
 exports.default = ElVisible;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -252,115 +363,19 @@ var ElWatcher = function (_Emitter) {
 exports.default = ElWatcher;
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _Pup = __webpack_require__(4);
-
-var _Pup2 = _interopRequireDefault(_Pup);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-window.pup = new _Pup2.default(true);
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
+var _Pup = __webpack_require__(1);
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _ElWatcher = __webpack_require__(2);
-
-var _ElWatcher2 = _interopRequireDefault(_ElWatcher);
-
-var _ElVisible = __webpack_require__(1);
-
-var _ElVisible2 = _interopRequireDefault(_ElVisible);
-
-var _Emitter2 = __webpack_require__(0);
-
-var _Emitter3 = _interopRequireDefault(_Emitter2);
+var _Pup2 = _interopRequireDefault(_Pup);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Pup = function (_Emitter) {
-    _inherits(Pup, _Emitter);
-
-    function Pup(start) {
-        _classCallCheck(this, Pup);
-
-        var _this = _possibleConstructorReturn(this, (Pup.__proto__ || Object.getPrototypeOf(Pup)).call(this));
-
-        _this.nodeWatcher = new _ElWatcher2.default();
-        _this.visWatcher = new _ElVisible2.default(0.01);
-        _this.visWatcher.on('changeDetected', function (change) {
-            return _this.handleVisChange(change);
-        });
-        _this.nodeWatcher.on('elAdded', function (el) {
-            return _this.handleNodeAdded(el);
-        });
-        if (start) {
-            _this.start();
-        }
-        _this.total = 0;
-        _this.lastAreaPrecent = 0;
-        return _this;
-    }
-
-    _createClass(Pup, [{
-        key: 'enableTracking',
-        value: function enableTracking(target) {
-            Object.defineProperty(target, 'pupTracking', {
-                enumerable: false,
-                value: { states: [] }
-            });
-        }
-    }, {
-        key: 'handleVisChange',
-        value: function handleVisChange(change) {
-            var newChange = {};
-            var target = change.target;
-            newChange.ratio = change.intersectionRatio;
-            newChange.time = this.visWatcher.createdAt + change.time;
-            newChange.area = change.intersectionRect.height * change.intersectionRect.width;
-            if (!target.pupTracking) {
-                this.enableTracking(target);
-            }
-            target.pupTracking.states.push(newChange);
-        }
-    }, {
-        key: 'handleNodeAdded',
-        value: function handleNodeAdded(el) {
-            this.visWatcher.watch(el);
-        }
-    }, {
-        key: 'start',
-        value: function start() {
-            this.visWatcher.watchCurrent();
-            this.nodeWatcher.start();
-        }
-    }]);
-
-    return Pup;
-}(_Emitter3.default);
-
-exports.default = Pup;
+window.pup = new _Pup2.default(true);
 
 /***/ })
 /******/ ]);

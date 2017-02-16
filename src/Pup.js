@@ -13,7 +13,7 @@ export default class Pup extends Emitter {
             this.start();
         }
         this.total = 0;
-        this.lastAreaPrecent = 0;
+        this.lastAreaPercent = 0;
     }
     enableTracking(target) {
         Object.defineProperty(target, 'pupTracking', {
@@ -31,6 +31,22 @@ export default class Pup extends Emitter {
             this.enableTracking(target);
         }
         target.pupTracking.states.push(newChange);
+
+        let state = target.pupTracking.states;
+        let length = state.length;
+        
+        if (length > 1) {
+            let delta = state[length-1].area - state[length-2].area;
+            this.total += delta;
+            if (this.total != 0) {
+                state[length-1].percentChange = 100 * (delta/this.total);
+            }
+        } else {
+            //First state instance
+            state[length-1].percentChange = 0;
+        }
+        console.log(state);
+        
     }
 
     handleNodeAdded(el) {
