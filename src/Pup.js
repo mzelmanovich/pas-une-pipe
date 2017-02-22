@@ -20,6 +20,11 @@ export default class Pup extends Emitter {
         this.counter = 0;
 
     }
+
+    getAreas(){
+        this.list.iterate(x => console.log(x, x.pupTracking.states[x.pupTracking.states.length-1].area));
+    }
+
     enableTracking(target) {
         Object.defineProperty(target, 'pupTracking', {
             enumerable: false,
@@ -50,7 +55,7 @@ export default class Pup extends Emitter {
             this.list.deleteValue(target);
 
         } 
-        this.list.printList();
+        this.king = this.list.printList();
          
     }
 

@@ -175,6 +175,13 @@ var Pup = function (_Emitter) {
     }
 
     _createClass(Pup, [{
+        key: 'getAreas',
+        value: function getAreas() {
+            this.list.iterate(function (x) {
+                return console.log(x, x.pupTracking.states[x.pupTracking.states.length - 1].area);
+            });
+        }
+    }, {
         key: 'enableTracking',
         value: function enableTracking(target) {
             Object.defineProperty(target, 'pupTracking', {
@@ -207,7 +214,7 @@ var Pup = function (_Emitter) {
             } else if (states[states.length - 1].area <= 0 && this.list.searchValue(target)) {
                 this.list.deleteValue(target);
             }
-            this.list.printList();
+            this.king = this.list.printList();
         }
     }, {
         key: 'handleNodeAdded',
@@ -440,6 +447,15 @@ var LinkedList = function () {
             }
         }
     }, {
+        key: "iterate",
+        value: function iterate(fnc) {
+            var place = this.head;
+            while (place) {
+                fnc(place.value, place);
+                place = place.next;
+            }
+        }
+    }, {
         key: "removeHead",
         value: function removeHead() {
             if (this.head) {
@@ -522,52 +538,18 @@ var LinkedList = function () {
         value: function printList() {
             var place = this.head;
             var largest = this.head;
-            console.log("Printing List");
+            // console.log("Printing List");
             while (place) {
-                console.log("HTML");
-                console.log(place.value);
-                console.log("Area");
-                console.log(place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area);
+                //     console.log("HTML");
+                //     console.log(place.value);
+                //     console.log("Area");
+                // console.log(place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area);
                 if (largest.value.pupTracking.states[largest.value.pupTracking.states.length - 1].area < place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area) {
                     largest = place;
                 }
                 place = place.next;
             }
-            if (largest != -1) {
-                console.log("King:");
-                console.log(largest.value);
-                console.log(largest.value.pupTracking.states[largest.value.pupTracking.states.length - 1].area);
-            }
-        }
-    }, {
-        key: "searchForward",
-        value: function searchForward(searchValue) {
-            var searchFnc = typeof searchValue === 'string' ? function (value) {
-                return value === searchValue;
-            } : searchValue;
-            var recursiveFunc = function recursiveFunc(node) {
-
-                if (node) {
-                    console.log(node.value);
-                    return searchFnc(node.value) ? node : recursiveFunc(node.next);
-                }
-                return null;
-            };
-            return recursiveFunc(this.head);
-        }
-    }, {
-        key: "searchBackward",
-        value: function searchBackward(searchValue) {
-            var searchFnc = typeof searchValue === 'string' ? function (value) {
-                return value === searchValue;
-            } : searchValue;
-            var recursiveFunc = function recursiveFunc(node) {
-                if (node) {
-                    return searchFnc(node.value) ? node : recursiveFunc(node.previous);
-                }
-                return null;
-            };
-            return recursiveFunc(this.tail);
+            return largest;
         }
     }, {
         key: "size",
