@@ -134,7 +134,7 @@ var _Emitter2 = __webpack_require__(0);
 
 var _Emitter3 = _interopRequireDefault(_Emitter2);
 
-var _LinkedList = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \".LinkedList.js\""); e.code = 'MODULE_NOT_FOUND';; throw e; }()));
+var _LinkedList = __webpack_require__(5);
 
 var _LinkedList2 = _interopRequireDefault(_LinkedList);
 
@@ -169,6 +169,7 @@ var Pup = function (_Emitter) {
         _this.lastAreaPercent = 0;
         _this.king = null;
         _this.list = new _LinkedList2.default();
+        _this.counter = 0;
 
         return _this;
     }
@@ -197,12 +198,16 @@ var Pup = function (_Emitter) {
             var states = target.pupTracking.states;
 
             var delta = states[states.length - 1].area - (states[states.length - 2] ? states[states.length - 2].area : 0);
+
             this.total += delta;
             states[states.length - 1].percentChange = 100 * (delta / this.total);
-            // console.log("target:"+target);
-            // console.log(target.pupTracking);
-            list.addToTail("test");
-            console.log(list);
+
+            if (states[states.length - 1].area > 0 && !this.list.searchValue(target)) {
+                this.list.addToTail(target);
+            } else if (states[states.length - 1].area <= 0 && this.list.searchValue(target)) {
+                this.list.deleteValue(target);
+            }
+            this.list.printList();
         }
     }, {
         key: 'handleNodeAdded',
@@ -378,6 +383,209 @@ var _Pup2 = _interopRequireDefault(_Pup);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.pup = new _Pup2.default(true);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var LLNode = function () {
+    function LLNode(item) {
+        _classCallCheck(this, LLNode);
+
+        this.value = item;
+    }
+
+    _createClass(LLNode, [{
+        key: "remove",
+        value: function remove() {
+            if (this.previous) {
+                this.previous.next = this.next;
+            }
+            if (this.next) {
+                this.next.previous = this.previous;
+            }
+        }
+    }]);
+
+    return LLNode;
+}();
+
+var LinkedList = function () {
+    function LinkedList() {
+        _classCallCheck(this, LinkedList);
+    }
+
+    _createClass(LinkedList, [{
+        key: "addToTail",
+        value: function addToTail(item) {
+            var node = new LLNode(item);
+            if (this.tail) {
+                this.tail.next = node;
+                node.previous = this.tail;
+            }
+            this.tail = node;
+            if (!this.head) {
+                this.head = this.tail;
+            }
+        }
+    }, {
+        key: "removeHead",
+        value: function removeHead() {
+            if (this.head) {
+                var currentHead = this.head;
+                this.head = currentHead.next;
+                if (!currentHead.next) {
+                    this.tail = null;
+                }
+                if (this.head) {
+                    this.head.previous = null;
+                }
+                return currentHead.value;
+            }
+        }
+    }, {
+        key: "removeTail",
+        value: function removeTail() {
+            if (this.tail) {
+                var currentTail = this.tail;
+                this.tail = currentTail.previous;
+                if (!currentTail.previous) {
+                    this.head = null;
+                }
+                if (this.tail) {
+                    this.tail.next = null;
+                }
+                return currentTail.value;
+            }
+        }
+    }, {
+        key: "addToHead",
+        value: function addToHead(item) {
+            var node = new Node(item);
+            if (this.head) {
+                this.head.previous = node;
+                node.next = this.head;
+            }
+
+            this.head = node;
+
+            if (!this.tail) {
+                this.tail = this.head;
+            }
+        }
+    }, {
+        key: "searchValue",
+        value: function searchValue(_searchValue) {
+            var place = this.head;
+            while (place) {
+                // console.log(place.value == searchValue);
+                if (place.value == _searchValue) {
+                    return place;
+                }
+                place = place.next;
+            }
+            return null;
+        }
+    }, {
+        key: "deleteValue",
+        value: function deleteValue(_deleteValue) {
+            var place = this.head;
+            while (place) {
+
+                if (place.value == _deleteValue) {
+                    if (place == this.head) {
+                        this.removeHead();
+                    } else if (place == this.tail) {
+                        this.removeTail();
+                    } else {
+                        if (place.previous) place.previous.next = place.next;
+                        if (place.next && place.previous) place.next.previous = place.previous;
+                    }
+                }
+                place = place.next;
+            }
+            return null;
+        }
+    }, {
+        key: "printList",
+        value: function printList() {
+            var place = this.head;
+            var largest = this.head;
+            console.log("Printing List");
+            while (place) {
+                console.log("HTML");
+                console.log(place.value);
+                console.log("Area");
+                console.log(place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area);
+                if (largest.value.pupTracking.states[largest.value.pupTracking.states.length - 1].area < place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area) {
+                    largest = place;
+                }
+                place = place.next;
+            }
+            if (largest != -1) {
+                console.log("King:");
+                console.log(largest.value);
+                console.log(largest.value.pupTracking.states[largest.value.pupTracking.states.length - 1].area);
+            }
+        }
+    }, {
+        key: "searchForward",
+        value: function searchForward(searchValue) {
+            var searchFnc = typeof searchValue === 'string' ? function (value) {
+                return value === searchValue;
+            } : searchValue;
+            var recursiveFunc = function recursiveFunc(node) {
+
+                if (node) {
+                    console.log(node.value);
+                    return searchFnc(node.value) ? node : recursiveFunc(node.next);
+                }
+                return null;
+            };
+            return recursiveFunc(this.head);
+        }
+    }, {
+        key: "searchBackward",
+        value: function searchBackward(searchValue) {
+            var searchFnc = typeof searchValue === 'string' ? function (value) {
+                return value === searchValue;
+            } : searchValue;
+            var recursiveFunc = function recursiveFunc(node) {
+                if (node) {
+                    return searchFnc(node.value) ? node : recursiveFunc(node.previous);
+                }
+                return null;
+            };
+            return recursiveFunc(this.tail);
+        }
+    }, {
+        key: "size",
+        value: function size() {
+            var current = this.head;
+            var counter = 0;
+            while (current) {
+                current = current.next;
+                counter++;
+            }
+            return counter;
+        }
+    }]);
+
+    return LinkedList;
+}();
+
+exports.default = LinkedList;
 
 /***/ })
 /******/ ]);

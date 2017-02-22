@@ -1,7 +1,7 @@
 import ElWatcher from './ElWatcher.js';
 import ElVisible from './ElVisible.js';
 import Emitter from './Emitter.js';
-import LinkedList from '.\LinkedList.js';
+import LinkedList from './LinkedList.js';
 
 export default class Pup extends Emitter {
     constructor(start) {
@@ -17,6 +17,7 @@ export default class Pup extends Emitter {
         this.lastAreaPercent = 0;
         this.king = null;
         this.list = new LinkedList();
+        this.counter = 0;
 
     }
     enableTracking(target) {
@@ -39,15 +40,18 @@ export default class Pup extends Emitter {
         let states = target.pupTracking.states;
 
         let delta = states[states.length - 1].area - (states[states.length - 2] ? states[states.length - 2].area : 0);
+        
         this.total += delta;
         states[states.length - 1].percentChange = 100 * (delta/this.total);
-        // console.log("target:"+target);
-        // console.log(target.pupTracking);
-        list.addToTail("test");
-        console.log(list);
+        
+        if (states[states.length - 1].area > 0 && !this.list.searchValue(target)) {
+            this.list.addToTail(target);
+        } else if (states[states.length - 1].area <= 0 && this.list.searchValue(target)) {
+            this.list.deleteValue(target);
 
-        
-        
+        } 
+        this.list.printList();
+         
     }
 
     handleNodeAdded(el) {
