@@ -134,6 +134,10 @@ var _Emitter2 = __webpack_require__(0);
 
 var _Emitter3 = _interopRequireDefault(_Emitter2);
 
+var _LinkedList = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \".LinkedList.js\""); e.code = 'MODULE_NOT_FOUND';; throw e; }()));
+
+var _LinkedList2 = _interopRequireDefault(_LinkedList);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -163,6 +167,9 @@ var Pup = function (_Emitter) {
         }
         _this.total = 0;
         _this.lastAreaPercent = 0;
+        _this.king = null;
+        _this.list = new _LinkedList2.default();
+
         return _this;
     }
 
@@ -192,10 +199,10 @@ var Pup = function (_Emitter) {
             var delta = states[states.length - 1].area - (states[states.length - 2] ? states[states.length - 2].area : 0);
             this.total += delta;
             states[states.length - 1].percentChange = 100 * (delta / this.total);
-            console.log("target:" + target);
-            console.log(target.pupTracking);
-
-            console.log("running total: " + this.total);
+            // console.log("target:"+target);
+            // console.log(target.pupTracking);
+            list.addToTail("test");
+            console.log(list);
         }
     }, {
         key: 'handleNodeAdded',
