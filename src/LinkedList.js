@@ -26,9 +26,9 @@ export default class LinkedList {
         }
     }
 
-    iterate(fnc){
+    iterate(fnc) {
         let place = this.head;
-        while(place){
+        while (place) {
             fnc(place.value, place);
             place = place.next;
         }
@@ -76,7 +76,7 @@ export default class LinkedList {
 
     searchValue(searchValue) {
         var place = this.head;
-        while(place) {
+        while (place) {
             // console.log(place.value == searchValue);
             if (place.value == searchValue) {
                 return place;
@@ -88,7 +88,7 @@ export default class LinkedList {
 
     deleteValue(deleteValue) {
         var place = this.head;
-        while(place) {
+        while (place) {
 
             if (place.value == deleteValue) {
                 if (place == this.head) {
@@ -108,10 +108,10 @@ export default class LinkedList {
         var place = this.head;
         var largest = this.head;
         // console.log("Printing List");
-        while(place) {
-        //     console.log("HTML");
-        //     console.log(place.value);
-        //     console.log("Area");
+        while (place) {
+            //     console.log("HTML");
+            //     console.log(place.value);
+            //     console.log("Area");
             // console.log(place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area);
             if (largest.value.pupTracking.states[largest.value.pupTracking.states.length - 1].area < place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area) {
                 largest = place;
@@ -121,7 +121,7 @@ export default class LinkedList {
         return largest;
     }
 
-     size() {
+    size() {
         var current = this.head;
         var counter = 0;
         while (current) {

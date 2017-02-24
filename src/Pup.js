@@ -67,4 +67,17 @@ export default class Pup extends Emitter {
         this.visWatcher.watchCurrent();
         this.nodeWatcher.start();
     }
+
+    getTimeWhen(precent) {
+        let runningTotal = 0;
+        let time;
+        this.list.iterate(value => {
+            const states = value.pupTracking.states;
+            runningTotal += Math.round(states[states.length - 1].area / this.total);
+            if (!time && runningTotal >= precent) {
+                time = states[states.length - 1].time;
+            }
+        });
+        return time;
+    }
 }

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -134,7 +134,7 @@ var _Emitter2 = __webpack_require__(0);
 
 var _Emitter3 = _interopRequireDefault(_Emitter2);
 
-var _LinkedList = __webpack_require__(5);
+var _LinkedList = __webpack_require__(4);
 
 var _LinkedList2 = _interopRequireDefault(_LinkedList);
 
@@ -195,7 +195,7 @@ var Pup = function (_Emitter) {
             var newChange = {};
             var target = change.target;
             newChange.ratio = change.intersectionRatio;
-            newChange.time = this.visWatcher.createdAt + change.time;
+            newChange.time = change.time;
             newChange.area = change.intersectionRect.height * change.intersectionRect.width;
             if (!target.pupTracking) {
                 this.enableTracking(target);
@@ -226,6 +226,22 @@ var Pup = function (_Emitter) {
         value: function start() {
             this.visWatcher.watchCurrent();
             this.nodeWatcher.start();
+        }
+    }, {
+        key: 'getTimeWhen',
+        value: function getTimeWhen(precent) {
+            var _this2 = this;
+
+            var runningTotal = 0;
+            var time = void 0;
+            this.list.iterate(function (value) {
+                var states = value.pupTracking.states;
+                runningTotal += Math.round(states[states.length - 1].area / _this2.total);
+                if (!time && runningTotal >= precent) {
+                    time = states[states.length - 1].time;
+                }
+            });
+            return time;
         }
     }]);
 
@@ -276,7 +292,7 @@ var ElVisible = function (_Emitter) {
                 return _this.emit('changeDetected', change);
             });
         }, { threshold: args });
-        _this.createdAt = Date.now();
+        // this.createdAt = Date.now();
         return _this;
     }
 
@@ -378,21 +394,6 @@ exports.default = ElWatcher;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _Pup = __webpack_require__(1);
-
-var _Pup2 = _interopRequireDefault(_Pup);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-window.pup = new _Pup2.default(true);
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -568,6 +569,21 @@ var LinkedList = function () {
 }();
 
 exports.default = LinkedList;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _Pup = __webpack_require__(1);
+
+var _Pup2 = _interopRequireDefault(_Pup);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+window.pup = new _Pup2.default(true);
 
 /***/ })
 /******/ ]);
