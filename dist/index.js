@@ -235,9 +235,9 @@ var Pup = function (_Emitter) {
             var runningTotal = 0;
             var time = void 0;
             this.list.iterate(function (value) {
-                console.log(value, _this2.total);
                 var states = value.pupTracking.states;
-                runningTotal += Math.round(states[states.length - 1].area / _this2.total);
+                runningTotal += states[states.length - 1].area / _this2.total;
+                console.log(runningTotal);
                 if (!time && runningTotal >= precent) {
                     time = states[states.length - 1].time;
                 }

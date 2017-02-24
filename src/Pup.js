@@ -72,9 +72,9 @@ export default class Pup extends Emitter {
         let runningTotal = 0;
         let time;
         this.list.iterate(value => {
-            console.log(value, this.total);
             const states = value.pupTracking.states;
-            runningTotal += Math.round(states[states.length - 1].area / this.total);
+            runningTotal += states[states.length - 1].area / this.total;
+            console.log(runningTotal);
             if (!time && runningTotal >= precent) {
                 time = states[states.length - 1].time;
             }
