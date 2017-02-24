@@ -25,6 +25,15 @@ export default class LinkedList {
             this.head = this.tail;
         }
     }
+
+    iterate(fnc) {
+        let place = this.head;
+        while (place) {
+            fnc(place.value, place);
+            place = place.next;
+        }
+    }
+
     removeHead() {
         if (this.head) {
             var currentHead = this.head;
@@ -65,27 +74,61 @@ export default class LinkedList {
         }
     }
 
-    searchForward(searchValue) {
-        let searchFnc = typeof searchValue === 'string' ? (value) => value === searchValue : searchValue;
-        let recursiveFunc = (node) => {
-            if (node) {
-                return searchFnc(node.value) ? node : recursiveFunc(node.next);
+    searchValue(searchValue) {
+        var place = this.head;
+        while (place) {
+            // console.log(place.value == searchValue);
+            if (place.value == searchValue) {
+                return place;
             }
-            return null;
-        };
-        return recursiveFunc(this.head);
+            place = place.next;
+        }
+        return null;
     }
 
-    searchBackward(searchValue) {
-        let searchFnc = typeof searchValue === 'string' ? (value) => value === searchValue : searchValue;
-        let recursiveFunc = (node) => {
-            if (node) {
-                return searchFnc(node.value) ? node : recursiveFunc(node.previous);
+    deleteValue(deleteValue) {
+        var place = this.head;
+        while (place) {
+
+            if (place.value == deleteValue) {
+                if (place == this.head) {
+                    this.removeHead();
+                } else if (place == this.tail) {
+                    this.removeTail();
+                } else {
+                    if (place.previous) place.previous.next = place.next;
+                    if (place.next && place.previous) place.next.previous = place.previous;
+                }
             }
-            return null;
-        };
-        return recursiveFunc(this.tail);
+            place = place.next;
+        }
+        return null;
+    }
+    printList() {
+        var place = this.head;
+        var largest = this.head;
+        // console.log("Printing List");
+        while (place) {
+            //     console.log("HTML");
+            //     console.log(place.value);
+            //     console.log("Area");
+            // console.log(place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area);
+            if (largest.value.pupTracking.states[largest.value.pupTracking.states.length - 1].area < place.value.pupTracking.states[place.value.pupTracking.states.length - 1].area) {
+                largest = place;
+            }
+            place = place.next;
+        }
+        return largest;
     }
 
+    size() {
+        var current = this.head;
+        var counter = 0;
+        while (current) {
+            current = current.next;
+            counter++;
+        }
+        return counter;
+    }
 
 }

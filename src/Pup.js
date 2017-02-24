@@ -1,6 +1,7 @@
 import ElWatcher from './ElWatcher.js';
 import ElVisible from './ElVisible.js';
 import Emitter from './Emitter.js';
+import LinkedList from './LinkedList.js';
 
 export default class Pup extends Emitter {
     constructor(start) {
@@ -14,7 +15,16 @@ export default class Pup extends Emitter {
         }
         this.total = 0;
         this.lastAreaPercent = 0;
+        this.king = null;
+        this.list = new LinkedList();
+        this.counter = 0;
+
     }
+
+    getAreas() {
+        this.list.iterate(x => console.log(x, x.pupTracking.states[x.pupTracking.states.length - 1].area));
+    }
+
     enableTracking(target) {
         Object.defineProperty(target, 'pupTracking', {
             enumerable: false,
@@ -25,7 +35,7 @@ export default class Pup extends Emitter {
         const newChange = {};
         const target = change.target;
         newChange.ratio = change.intersectionRatio;
-        newChange.time = this.visWatcher.createdAt + change.time;
+        newChange.time = change.time;
         newChange.area = change.intersectionRect.height * change.intersectionRect.width;
         if (!target.pupTracking) {
             this.enableTracking(target);
@@ -35,14 +45,18 @@ export default class Pup extends Emitter {
         let states = target.pupTracking.states;
 
         let delta = states[states.length - 1].area - (states[states.length - 2] ? states[states.length - 2].area : 0);
-        this.total += delta;
-        states[states.length - 1].percentChange = 100 * (delta/this.total);
-        console.log("target:"+target);
-        console.log(target.pupTracking);
 
-        console.log("running total: " + this.total);
-        
-        
+        this.total += delta;
+        states[states.length - 1].percentChange = 100 * (delta / this.total);
+
+        if (states[states.length - 1].area > 0 && !this.list.searchValue(target)) {
+            this.list.addToTail(target);
+        } else if (states[states.length - 1].area <= 0 && this.list.searchValue(target)) {
+            this.list.deleteValue(target);
+
+        }
+        this.king = this.list.printList();
+
     }
 
     handleNodeAdded(el) {
@@ -52,5 +66,19 @@ export default class Pup extends Emitter {
     start() {
         this.visWatcher.watchCurrent();
         this.nodeWatcher.start();
+    }
+
+    getTimeWhen(precent) {
+        let runningTotal = 0;
+        let time;
+        this.list.iterate(value => {
+            const states = value.pupTracking.states;
+            runningTotal += states[states.length - 1].area / this.total;
+            console.log(runningTotal);
+            if (!time && runningTotal >= precent) {
+                time = states[states.length - 1].time;
+            }
+        });
+        return time;
     }
 }
