@@ -4,7 +4,7 @@ export default class ElVisible extends Emitter {
     constructor(...args) {
         super();
         this.intersectionObs = new IntersectionObserver(changes => changes.forEach(change => this.emit('changeDetected', change)), { threshold: args });
-        this.createdAt = Date.now();
+        // this.createdAt = Date.now();
     }
 
     watch(el) {

@@ -21,8 +21,8 @@ export default class Pup extends Emitter {
 
     }
 
-    getAreas(){
-        this.list.iterate(x => console.log(x, x.pupTracking.states[x.pupTracking.states.length-1].area));
+    getAreas() {
+        this.list.iterate(x => console.log(x, x.pupTracking.states[x.pupTracking.states.length - 1].area));
     }
 
     enableTracking(target) {
@@ -35,7 +35,7 @@ export default class Pup extends Emitter {
         const newChange = {};
         const target = change.target;
         newChange.ratio = change.intersectionRatio;
-        newChange.time = this.visWatcher.createdAt + change.time;
+        newChange.time = change.time;
         newChange.area = change.intersectionRect.height * change.intersectionRect.width;
         if (!target.pupTracking) {
             this.enableTracking(target);
@@ -45,18 +45,18 @@ export default class Pup extends Emitter {
         let states = target.pupTracking.states;
 
         let delta = states[states.length - 1].area - (states[states.length - 2] ? states[states.length - 2].area : 0);
-        
+
         this.total += delta;
-        states[states.length - 1].percentChange = 100 * (delta/this.total);
-        
+        states[states.length - 1].percentChange = 100 * (delta / this.total);
+
         if (states[states.length - 1].area > 0 && !this.list.searchValue(target)) {
             this.list.addToTail(target);
         } else if (states[states.length - 1].area <= 0 && this.list.searchValue(target)) {
             this.list.deleteValue(target);
 
-        } 
+        }
         this.king = this.list.printList();
-         
+
     }
 
     handleNodeAdded(el) {
